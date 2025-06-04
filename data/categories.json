@@ -1,0 +1,54 @@
+[
+    {
+        "id": 0,
+        "category_name": "Доходы"
+    },
+    {
+        "id": 1,
+        "category_name": "Продукты"
+    },
+    {
+        "id": 2,
+        "category_name": "Электрички"
+    },
+    {
+        "id": 3,
+        "category_name": "Метро"
+    },
+    {
+        "id": 4,
+        "category_name": "Дудки"
+    },
+    {
+        "id": 5,
+        "category_name": "Таблетки"
+    },
+    {
+        "id": 6,
+        "category_name": "Зал"
+    },
+    {
+        "id": 8,
+        "category_name": "Коты"
+    },
+    {
+        "id": 9,
+        "category_name": "Психолог"
+    },
+    {
+        "id": 10,
+        "category_name": "Подписки"
+    },
+    {
+        "id": 11,
+        "category_name": "Комуналка"
+    },
+    {
+        "id": 12,
+        "category_name": "Такси"
+    },
+    {
+        "id": 13,
+        "category_name": "Досуг"
+    }
+]
