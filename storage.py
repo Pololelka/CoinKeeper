@@ -1,17 +1,19 @@
-import json
-import os
+import mysql.connector
 
 
-def load_file(file_name):
-    if os.path.exists(file_name):
-        with open(file_name, "r", encoding="utf-8") as f:
-            return json.load(f)
-    return []
+def get_connection():
+    conn = mysql.connector.connect(
+        user="root", password="12345678", host="127.0.0.1", database="coinkeeper"
+    )
+    cursor = conn.cursor(dictionary=True)
+    return conn, cursor
 
 
-def save_file(file_name, data):
-    with open(file_name, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
+def close_connection(conn, cursor):
+    if cursor:
+        cursor.close()
+    if conn:
+        conn.close()
 
 
 def format_date(date_str: str) -> str:

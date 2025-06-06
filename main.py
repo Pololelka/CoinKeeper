@@ -1,15 +1,13 @@
 from categories import categories_menu
 from transactions import history_menu
-from statistic import statistic_menu
-from storage import load_file
-from balance import show_balance
 
-FILE_BALANCE = "data/balance.json"
+# from statistic import statistic_menu
+from balance import get_balance
 
 
 def print_main_menu():
     print("\nГлавное меню:")
-    print(f"\nТекущий баланс - {show_balance()}")
+    print(f"\nТекущий баланс - {get_balance()}")
     print("\n1. Показать историю")
     print("2. Показать категории")
     print("3. Сводка")

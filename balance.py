@@ -1,20 +1,29 @@
-from storage import load_file, save_file
-
-FILE_BALANCE = "data/balance.json"
+from storage import get_connection, close_connection
 
 
 def add_to_balance(id_catogory, amount):
-    balance = load_file(FILE_BALANCE)
-    balance[0]["balance"] += -amount if id_catogory != 0 else amount
-    save_file(FILE_BALANCE, balance)
+    balance = get_balance()
+    balance += -amount if id_catogory != 1 else amount
+    update_balance(balance)
 
 
 def delete_from_balance(id_catogory, amount):
-    balance = load_file(FILE_BALANCE)
-    balance[0]["balance"] += amount if id_catogory != 0 else -amount
-    save_file(FILE_BALANCE, balance)
+    balance = get_balance()
+    balance += amount if id_catogory != 1 else -amount
+    update_balance(balance)
 
 
-def show_balance():
-    balance = load_file(FILE_BALANCE)
+def get_balance():
+    conn, cursor = get_connection()
+    cursor.execute("SELECT * FROM balance")
+    balance = cursor.fetchall()
+    close_connection(conn, cursor)
     return balance[0]["balance"]
+
+
+def update_balance(balance):
+    conn, cursor = get_connection()
+    upd_query = "UPDATE balance SET balance = %s WHERE id_balance = 1"
+    cursor.execute(upd_query, (balance,))
+    conn.commit()
+    close_connection(conn, cursor)

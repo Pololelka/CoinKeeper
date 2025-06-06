@@ -1,65 +1,51 @@
-from storage import load_file, save_file
-
-FILE_CATEGORIES = "data/categories.json"
+from storage import get_connection, close_connection
 
 
 def add_category():
     print("\nДобавление новой категории")
-    name = input("Введите название категории: ").strip()
+    category_name = input("Введите название категории: ").strip()
 
-    if not name:
+    if not category_name:
         print("Ошибка: название не может быть пустым.")
         return
 
-    categories = load_file(FILE_CATEGORIES)
+    insert_to_categories(category_name)
+    # if any(c["category_name"].lower() == name.lower() for c in categories):
+    #     print(f"Категория «{name}» уже существует.")
+    #     return
 
-    if any(c["category_name"].lower() == name.lower() for c in categories):
-        print(f"Категория «{name}» уже существует.")
-        return
-
-    new_id = max((c["id"] for c in categories), default=0) + 1
-    categories.append({"id": new_id, "category_name": name})
-    save_file(FILE_CATEGORIES, categories)
-    print(f"Категория «{name}» добавлена!")
+    print(f"Категория «{category_name}» добавлена!")
 
 
 def show_categories():
-    categories = load_file(FILE_CATEGORIES)
+    categories = get_all_categories()
+    # visible_categories = [c for c in categories if c["id"] != 0]
 
-    visible_categories = [c for c in categories if c["id"] != 0]
-
-    if not visible_categories:
-        print("Пока нет категорий.")
-        return
+    # if not visible_categories:
+    #     print("Пока нет категорий.")
+    #     return
 
     print("Ваши категории:")
-    for category in visible_categories:
-        print(f"{category['id']}. {category['category_name']}")
+    for category in categories:
+        print(f"{category['id_category']}. {category['category_name']}")
 
 
 def edit_categories():
-    categories = load_file(FILE_CATEGORIES)
-
-    if not categories:
-        print("Действие недоступно. Пока нет категорий.")
-        return
-
+    # if not categories:
+    #     print("Действие недоступно. Пока нет категорий.")
+    #     return
     print("Изменение категории")
     id_category = found_category()
     new_name = input("Введите новое название категории: ").strip()
 
-    for category in categories:
-        if category["id"] == id_category:
-            old_name = category["category_name"]
-            category["category_name"] = new_name
-            save_file(FILE_CATEGORIES, categories)
-            print(f"Категория «{old_name}» была изменена на «{new_name}».")
-            return
+    old_name = get_category_by_id(id_category)
+    update_categories(new_name, id_category)
+
+    print(f"Категория «{old_name[0]['category_name']}» была изменена на «{new_name}».")
 
 
 def found_category():
-    categories = load_file(FILE_CATEGORIES)
-
+    categories = get_all_categories()
     while True:
         try:
             id_category = int(input("Введите ID категории: "))
@@ -67,10 +53,54 @@ def found_category():
             print("Ошибка: введите число.")
             continue
 
-        if any(item.get("id") == id_category for item in categories):
+        if any(item.get("id_category") == id_category for item in categories):
             return id_category
         else:
             print("Такой категории не существует, попробуйте ещё раз.")
+
+
+def get_dict_categories():
+    conn, cursor = get_connection()
+
+    cursor.execute("SELECT * FROM categories")
+
+    categories = cursor.fetchall()
+    category_dict = {cat["id_category"]: cat["category_name"] for cat in categories}
+    close_connection(conn, cursor)
+    return category_dict
+
+
+def get_category_by_id(id_category):
+    conn, cursor = get_connection()
+    query = "SELECT * FROM categories WHERE id_category = %s"
+    cursor.execute(query, (id_category,))
+    category = cursor.fetchall()
+    close_connection(conn, cursor)
+    return category
+
+
+def update_categories(new_name, id_category):
+    conn, cursor = get_connection()
+    upd_query = "UPDATE categories SET category_name = %s WHERE id_category = %s"
+    cursor.execute(upd_query, (new_name, id_category))
+    conn.commit()
+    close_connection(conn, cursor)
+
+
+def get_all_categories():
+    conn, cursor = get_connection()
+    cursor.execute("SELECT * FROM categories")
+    categories = cursor.fetchall()
+    close_connection(conn, cursor)
+    return categories
+
+
+def insert_to_categories(category_name):
+    conn, cursor = get_connection()
+    insert_query = "INSERT INTO categories (category_name) VALUES (%s)"
+    cursor.execute(insert_query, (category_name,))
+    conn.commit()
+    close_connection(conn, cursor)
 
 
 def categories_menu():
