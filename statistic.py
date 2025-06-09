@@ -1,33 +1,29 @@
 import datetime
-from storage import load_file, format_date
+from categories import get_all_categories
+from storage import get_connection, close_connection, format_date
 
 
 month_default = datetime.date.today().isoformat()[:-3]
 
-FILE_CATEGORIES = "data/categories.json"
-FILE_HISTORY = "data/history.json"
-
 
 def show_statistics(month=month_default):
-    history = load_file(FILE_HISTORY)
-    categories = load_file(FILE_CATEGORIES)
+    history = get_history_by_mohth(month)
+    categories = get_all_categories()
 
     print(f"\nСводка расходов за {format_date(month)}:\n")
 
     mohth_amount = 0
     month_income = 0
     for cat in categories:
-        if cat["id"] == 0:
-            continue
         category_amount = 0
         for his in history:
-            if cat["id"] == his["id_category"] and his["date"][:-3] == month:
+            if cat["id_category"] == his["id_category"]:
                 category_amount += his["amount"]
         mohth_amount += category_amount
         print(f"{cat["category_name"]} - {category_amount}")
 
     for his in history:
-        if his["id_category"] == 0 and his["date"][:-3] == month:
+        if his["id_category"] == 1:
             month_income += his["amount"]
 
     print(f"\nРасходы за месяц - {mohth_amount}")
@@ -35,19 +31,29 @@ def show_statistics(month=month_default):
 
 
 def get_unique_months():
-    history = load_file(FILE_HISTORY)
-    unique_month = set()
+    conn, cursor = get_connection()
 
-    for his in history:
-        unique_month.add(his["date"][:-3])
+    query = "SELECT DISTINCT DATE_FORMAT(date, '%Y-%m') AS date FROM history ORDER BY date DESC"
+    cursor.execute(query)
+    unique_months = cursor.fetchall()
 
-    unique_month = list(unique_month)
-    unique_month.sort(reverse=True)
+    close_connection(conn, cursor)
 
     month_dict = {}
-    for i, uni in enumerate(unique_month, start=1):
-        month_dict[i] = uni
+    for i, uni in enumerate(unique_months, start=1):
+        month_dict[i] = uni["date"]
     return month_dict
+
+
+def get_history_by_mohth(month):
+    conn, cursor = get_connection()
+
+    query = "SELECT * FROM history WHERE date LIKE %s"
+    cursor.execute(query, (f"%{month}%",))
+    history_by_mohth = cursor.fetchall()
+
+    close_connection(conn, cursor)
+    return history_by_mohth
 
 
 def statistic_menu():

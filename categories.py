@@ -8,22 +8,19 @@ def add_category():
     if not category_name:
         print("Ошибка: название не может быть пустым.")
         return
-
+    categories = get_all_categories()
+    if any(c["category_name"].lower() == category_name.lower() for c in categories):
+        print(f"Категория «{category_name}» уже существует.")
+        return
     insert_to_categories(category_name)
-    # if any(c["category_name"].lower() == name.lower() for c in categories):
-    #     print(f"Категория «{name}» уже существует.")
-    #     return
-
     print(f"Категория «{category_name}» добавлена!")
 
 
 def show_categories():
     categories = get_all_categories()
-    # visible_categories = [c for c in categories if c["id"] != 0]
-
-    # if not visible_categories:
-    #     print("Пока нет категорий.")
-    #     return
+    if not categories:
+        print("Пока нет категорий.")
+        return
 
     print("Ваши категории:")
     for category in categories:
@@ -31,9 +28,10 @@ def show_categories():
 
 
 def edit_categories():
-    # if not categories:
-    #     print("Действие недоступно. Пока нет категорий.")
-    #     return
+    categories = get_all_categories()
+    if not categories:
+        print("Действие недоступно. Пока нет категорий.")
+        return
     print("Изменение категории")
     id_category = found_category()
     new_name = input("Введите новое название категории: ").strip()
@@ -61,10 +59,7 @@ def found_category():
 
 def get_dict_categories():
     conn, cursor = get_connection()
-
-    cursor.execute("SELECT * FROM categories")
-
-    categories = cursor.fetchall()
+    categories = get_all_categories()
     category_dict = {cat["id_category"]: cat["category_name"] for cat in categories}
     close_connection(conn, cursor)
     return category_dict
@@ -89,7 +84,7 @@ def update_categories(new_name, id_category):
 
 def get_all_categories():
     conn, cursor = get_connection()
-    cursor.execute("SELECT * FROM categories")
+    cursor.execute("SELECT * FROM categories WHERE id_category != 1")
     categories = cursor.fetchall()
     close_connection(conn, cursor)
     return categories
@@ -114,7 +109,6 @@ def categories_menu():
 
         if choice == "1":
             add_category()
-            show_categories()
         elif choice == "2":
             edit_categories()
         elif choice == "0":

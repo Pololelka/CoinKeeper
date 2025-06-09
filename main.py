@@ -1,7 +1,6 @@
 from categories import categories_menu
 from transactions import history_menu
-
-# from statistic import statistic_menu
+from statistic import statistic_menu
 from balance import get_balance
 
 

@@ -1,19 +1,22 @@
 import datetime
 from storage import get_connection, close_connection
-from categories import show_categories, found_category, get_dict_categories
+from categories import (
+    show_categories,
+    found_category,
+    get_dict_categories,
+    get_all_categories,
+)
 from balance import add_to_balance, delete_from_balance
 
 
 def show_history():
+    if not check_transaction_history():
+        return
 
-    # if not history:
-    #     print("Пока нет операций.")
-    #     return
-
+    history = get_all_history()
     print("История операций:\n")
 
     category_dict = get_dict_categories()
-    history = get_all_history()
 
     for transaction in history:
         id_category = transaction["id_category"]
@@ -29,9 +32,11 @@ def show_history():
 
 def add_transaction(operation="-"):
 
-    # if not categories and operation != "+":
-    #     print("Действие недоступно. Пока нет категорий.")
-    #     return
+    categories = get_all_categories()
+
+    if not categories and operation != "+":
+        print("Действие недоступно. Пока нет категорий.")
+        return
     try:
         amount = int(input("Введите сумму операции: "))
     except ValueError:
@@ -49,7 +54,7 @@ def add_transaction(operation="-"):
     note = input("Введите комментарий (необязательно): ")
 
     date = datetime.date.today().isoformat()
-
+    print(date)
     insert_to_history(amount, id_category, note, date)
 
     print("Операция добавлена!")
@@ -71,9 +76,8 @@ def found_transaction():
 
 
 def edit_transaction():
-    # if not history:
-    #     print("Действие недоступно. Пока нет операций.")
-    #     return
+    if not check_transaction_history():
+        return
 
     print("Изменение операции")
     id_transaction = found_transaction()
@@ -96,10 +100,8 @@ def edit_transaction():
 
 
 def delete_transaction():
-
-    # if not history:
-    #     print("Действие недоступно. Пока нет операций.")
-    #     return
+    if not check_transaction_history():
+        return
 
     id_transaction = found_transaction()
     old_transaction = get_transaction_by_id(id_transaction)
@@ -107,8 +109,6 @@ def delete_transaction():
     delete_from_history(id_transaction)
     delete_from_balance(old_transaction[0]["id_category"], old_transaction[0]["amount"])
     print(f"Операция с ID {id_transaction} успешно удалена.")
-
-    # print(f"Операция с ID {id_transaction} не найдена.")
 
 
 def get_all_history():
@@ -154,6 +154,14 @@ def delete_from_history(id_transaction):
     cursor.execute(del_query, (id_transaction,))
     conn.commit()
     close_connection(conn, cursor)
+
+
+def check_transaction_history():
+    history = get_all_history()
+    if not history:
+        print("Действие недоступно. Пока нет операций.")
+        return False
+    return True
 
 
 def history_menu():
