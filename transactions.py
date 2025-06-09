@@ -12,12 +12,10 @@ from balance import add_to_balance, delete_from_balance
 def show_history():
     if not check_transaction_history():
         return
-
     history = get_all_history()
-    print("История операций:\n")
-
     category_dict = get_dict_categories()
 
+    print("История операций:\n")
     for transaction in history:
         id_category = transaction["id_category"]
         category_name = category_dict.get(id_category, "Неизвестно")
@@ -31,12 +29,11 @@ def show_history():
 
 
 def add_transaction(operation="-"):
-
     categories = get_all_categories()
-
     if not categories and operation != "+":
         print("Действие недоступно. Пока нет категорий.")
         return
+
     try:
         amount = int(input("Введите сумму операции: "))
     except ValueError:
@@ -52,7 +49,6 @@ def add_transaction(operation="-"):
     add_to_balance(id_category, amount)
 
     note = input("Введите комментарий (необязательно): ")
-
     date = datetime.date.today().isoformat()
     print(date)
     insert_to_history(amount, id_category, note, date)

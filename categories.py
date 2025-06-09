@@ -4,10 +4,10 @@ from storage import get_connection, close_connection
 def add_category():
     print("\nДобавление новой категории")
     category_name = input("Введите название категории: ").strip()
-
     if not category_name:
         print("Ошибка: название не может быть пустым.")
         return
+
     categories = get_all_categories()
     if any(c["category_name"].lower() == category_name.lower() for c in categories):
         print(f"Категория «{category_name}» уже существует.")
@@ -32,6 +32,7 @@ def edit_categories():
     if not categories:
         print("Действие недоступно. Пока нет категорий.")
         return
+
     print("Изменение категории")
     id_category = found_category()
     new_name = input("Введите новое название категории: ").strip()
@@ -74,20 +75,20 @@ def get_category_by_id(id_category):
     return category
 
 
-def update_categories(new_name, id_category):
-    conn, cursor = get_connection()
-    upd_query = "UPDATE categories SET category_name = %s WHERE id_category = %s"
-    cursor.execute(upd_query, (new_name, id_category))
-    conn.commit()
-    close_connection(conn, cursor)
-
-
 def get_all_categories():
     conn, cursor = get_connection()
     cursor.execute("SELECT * FROM categories WHERE id_category != 1")
     categories = cursor.fetchall()
     close_connection(conn, cursor)
     return categories
+
+
+def update_categories(new_name, id_category):
+    conn, cursor = get_connection()
+    upd_query = "UPDATE categories SET category_name = %s WHERE id_category = %s"
+    cursor.execute(upd_query, (new_name, id_category))
+    conn.commit()
+    close_connection(conn, cursor)
 
 
 def insert_to_categories(category_name):
