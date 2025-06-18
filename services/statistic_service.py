@@ -1,4 +1,4 @@
-from services.categories import get_dict_categories
+from services.categories_service import get_dict_categories
 from utils.formatting import format_date
 from models.statistic_model import (
     get_month_expense,

@@ -1,10 +1,10 @@
 import datetime
-from services.categories import (
+from services.categories_service import (
     show_categories,
     get_dict_categories,
     get_all_categories,
 )
-from services.balance import add_to_balance, delete_from_balance
+from services.balance_service import add_to_balance, delete_from_balance
 from models.transaction_model import (
     get_all_history,
     get_transaction_by_id,

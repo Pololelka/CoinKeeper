@@ -1,4 +1,8 @@
-from services.statistic import show_statistics, get_dict_unique_months, format_date
+from services.statistic_service import (
+    show_statistics,
+    get_dict_unique_months,
+    format_date,
+)
 
 
 def statistic_menu():

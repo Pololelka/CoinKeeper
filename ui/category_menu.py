@@ -1,4 +1,4 @@
-from services.categories import show_categories, add_category, edit_categories
+from services.categories_service import show_categories, add_category, edit_categories
 
 
 def categories_menu():
