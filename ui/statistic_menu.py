@@ -1,10 +1,10 @@
-from services.statistic import show_statistics, get_unique_months, format_date
+from services.statistic import show_statistics, get_dict_unique_months, format_date
 
 
 def statistic_menu():
     show_statistics()
     while True:
-        unique_month = get_unique_months()
+        unique_month = get_dict_unique_months()
         print("\nПоказать статистику за:")
         for i in unique_month:
             print(f"{i}. {format_date(unique_month[i])}")

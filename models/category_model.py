@@ -1,4 +1,5 @@
-from storage import get_connection, close_connection
+from db.connection import get_connection, close_connection
+from config import INCOME_CATEGORY_ID
 
 
 def get_category_by_id(id_category):
@@ -10,9 +11,18 @@ def get_category_by_id(id_category):
     return category
 
 
+def get_expense_categories():
+    conn, cursor = get_connection()
+    query = "SELECT * FROM categories WHERE id_category != %s"
+    cursor.execute(query, (INCOME_CATEGORY_ID,))
+    categories = cursor.fetchall()
+    close_connection(conn, cursor)
+    return categories
+
+
 def get_all_categories():
     conn, cursor = get_connection()
-    cursor.execute("SELECT * FROM categories WHERE id_category != 1")
+    cursor.execute("SELECT * FROM categories ")
     categories = cursor.fetchall()
     close_connection(conn, cursor)
     return categories

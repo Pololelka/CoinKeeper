@@ -3,6 +3,7 @@ from models.category_model import (
     get_category_by_id,
     insert_to_categories,
     update_categories,
+    get_expense_categories,
 )
 from utils.input_helpers import input_id_category
 
@@ -23,7 +24,7 @@ def add_category():
 
 
 def show_categories():
-    categories = get_all_categories()
+    categories = get_expense_categories()
     if not categories:
         print("Пока нет категорий.")
         return
@@ -34,9 +35,9 @@ def show_categories():
 
 
 def edit_categories():
-    categories = get_all_categories()
+    categories = get_expense_categories()
     if not categories:
-        print("Действие недоступно. Пока нет категорий.")
+        print("Действие недоступно. Пока нет категорий расхода.")
         return
 
     print("Изменение категории")

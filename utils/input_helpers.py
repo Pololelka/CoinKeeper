@@ -1,9 +1,9 @@
-from models.category_model import get_all_categories
+from models.category_model import get_expense_categories
 from models.transaction_model import get_all_history
 
 
 def input_id_category():
-    categories = get_all_categories()
+    categories = get_expense_categories()
     while True:
         try:
             id_category = int(input("Введите ID категории: "))

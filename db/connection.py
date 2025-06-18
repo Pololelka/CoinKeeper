@@ -1,10 +1,9 @@
 import mysql.connector
+from config import DATABASE
 
 
 def get_connection():
-    conn = mysql.connector.connect(
-        user="root", password="12345678", host="127.0.0.1", database="coinkeeper"
-    )
+    conn = mysql.connector.connect(**DATABASE)
     cursor = conn.cursor(dictionary=True)
     return conn, cursor
 

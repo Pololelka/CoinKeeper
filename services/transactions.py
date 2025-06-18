@@ -14,6 +14,7 @@ from models.transaction_model import (
 )
 
 from utils.input_helpers import input_id_transaction, input_id_category, input_amount
+from config import INCOME_CATEGORY_ID
 
 
 def show_history():
@@ -38,7 +39,7 @@ def show_history():
 def add_transaction(operation="expense"):
     categories = get_all_categories()
     if not categories and operation != "income":
-        print("Действие недоступно. Пока нет категорий.")
+        print("Действие недоступно. Пока нет категорий расхода.")
         return
 
     amount = input_amount()
@@ -47,7 +48,7 @@ def add_transaction(operation="expense"):
         show_categories()
         id_category = input_id_category()
     else:
-        id_category = 1
+        id_category = INCOME_CATEGORY_ID
 
     add_to_balance(id_category, amount)
 

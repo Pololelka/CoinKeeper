@@ -1,4 +1,4 @@
-from storage import get_connection, close_connection
+from db.connection import get_connection, close_connection
 
 
 def get_balance():
