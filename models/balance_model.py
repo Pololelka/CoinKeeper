@@ -1,24 +1,12 @@
 from storage import get_connection, close_connection
 
 
-def add_to_balance(id_catogory, amount):
-    balance = get_balance()
-    balance += -amount if id_catogory != 1 else amount
-    update_balance(balance)
-
-
-def delete_from_balance(id_catogory, amount):
-    balance = get_balance()
-    balance += amount if id_catogory != 1 else -amount
-    update_balance(balance)
-
-
 def get_balance():
     conn, cursor = get_connection()
     cursor.execute("SELECT * FROM balance")
-    balance = cursor.fetchall()
+    balance = cursor.fetchone()
     close_connection(conn, cursor)
-    return balance[0]["balance"]
+    return balance["balance"]
 
 
 def update_balance(balance):

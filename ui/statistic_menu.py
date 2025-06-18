@@ -1,0 +1,21 @@
+from services.statistic import show_statistics, get_unique_months, format_date
+
+
+def statistic_menu():
+    show_statistics()
+    while True:
+        unique_month = get_unique_months()
+        print("\nПоказать статистику за:")
+        for i in unique_month:
+            print(f"{i}. {format_date(unique_month[i])}")
+        print("0. Выйти")
+
+        choice = int(input("\nВыберите действие: "))
+
+        if choice == 0:
+            print("Назад")
+            break
+        elif choice in unique_month:
+            show_statistics(unique_month[choice])
+        else:
+            print("Неверный ввод. Попробуйте снова.")
