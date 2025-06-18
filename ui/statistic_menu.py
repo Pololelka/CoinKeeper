@@ -3,6 +3,7 @@ from services.statistic_service import (
     get_dict_unique_months,
     format_date,
 )
+from utils.input_helpers import input_choise_menu
 
 
 def statistic_menu():
@@ -14,7 +15,7 @@ def statistic_menu():
             print(f"{i}. {format_date(unique_month[i])}")
         print("0. Выйти")
 
-        choice = int(input("\nВыберите действие: "))
+        choice = input_choise_menu()
 
         if choice == 0:
             print("Назад")

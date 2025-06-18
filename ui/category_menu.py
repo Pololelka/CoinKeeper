@@ -1,4 +1,5 @@
 from services.categories_service import show_categories, add_category, edit_categories
+from utils.input_helpers import input_choise_menu
 
 
 def categories_menu():
@@ -8,12 +9,14 @@ def categories_menu():
         print("2. Изменить категорию")
         print("0. Назад")
 
-        choice = input("\nВыберите действие: ")
+        choice = input_choise_menu()
 
-        if choice == "1":
+        if choice == 1:
             add_category()
-        elif choice == "2":
+        elif choice == 2:
             edit_categories()
-        elif choice == "0":
+        elif choice == 0:
             print("Назад")
             break
+        else:
+            print("Неверный ввод. Попробуйте снова.")

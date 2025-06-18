@@ -2,7 +2,7 @@ import datetime
 from services.categories_service import (
     show_categories,
     get_dict_categories,
-    get_all_categories,
+    check_categories,
 )
 from services.balance_service import add_to_balance, delete_from_balance
 from models.transaction_model import (
@@ -37,9 +37,7 @@ def show_history():
 
 
 def add_transaction(operation="expense"):
-    categories = get_all_categories()
-    if not categories and operation != "income":
-        print("Действие недоступно. Пока нет категорий расхода.")
+    if not check_categories():
         return
 
     amount = input_amount()
@@ -79,6 +77,9 @@ def edit_amount_transaction():
 
 def edit_category_transaction():
     if not check_transaction_history():
+        return
+
+    if not check_categories():
         return
 
     print("Изменение категории операции")

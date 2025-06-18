@@ -1,4 +1,4 @@
-from models.category_model import get_expense_categories
+from models.category_model import get_expense_categories, get_all_categories
 from models.transaction_model import get_all_history
 
 
@@ -37,6 +37,31 @@ def input_amount():
         try:
             amount = int(input("Введите сумму операции: "))
             return amount
+        except ValueError:
+            print("Ошибка: введите число.")
+            continue
+
+
+def input_category_name():
+    while True:
+        category_name = input("Введите название категории: ").strip()
+
+        categories = get_all_categories()
+        if not category_name:
+            print("Ошибка: название не может быть пустым.")
+        elif any(
+            c["category_name"].lower() == category_name.lower() for c in categories
+        ):
+            print(f"Категория «{category_name}» уже существует.")
+        else:
+            return category_name
+
+
+def input_choise_menu():
+    while True:
+        try:
+            choice = int(input("\nВыберите действие: "))
+            return choice
         except ValueError:
             print("Ошибка: введите число.")
             continue

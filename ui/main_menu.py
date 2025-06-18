@@ -2,6 +2,7 @@ from models.balance_model import get_balance
 from ui.category_menu import categories_menu
 from ui.transaction_menu import history_menu
 from ui.statistic_menu import statistic_menu
+from utils.input_helpers import input_choise_menu
 
 
 def print_main_menu():
@@ -16,15 +17,15 @@ def print_main_menu():
 def run_main_menu():
     while True:
         print_main_menu()
-        choice = input("Выберите действие: ")
+        choice = input_choise_menu()
 
-        if choice == "1":
+        if choice == 1:
             history_menu()
-        elif choice == "2":
+        elif choice == 2:
             categories_menu()
-        elif choice == "3":
+        elif choice == 3:
             statistic_menu()
-        elif choice == "0":
+        elif choice == 0:
             print("👋 Выход.")
             break
         else:
